@@ -1,0 +1,16 @@
+[
+{
+  "modid": "remnantspirit",
+  "name": "Remnant Spirit",
+  "description": "Remnant Spirit mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Thog"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
