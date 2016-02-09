@@ -1,9 +1,10 @@
 package eu.thog.twistedsouls.client;
 
 import eu.thog.twistedsouls.CommonProxy;
-import eu.thog.twistedsouls.IModelLoader;
 import eu.thog.twistedsouls.TwistedSouls;
-import eu.thog.twistedsouls.TileEntitySoulSpawner;
+import eu.thog.twistedsouls.client.renderer.IModelLoader;
+import eu.thog.twistedsouls.client.renderer.TileEntitySoulSpawnerRenderer;
+import eu.thog.twistedsouls.tileentity.TileEntitySoulSpawner;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;

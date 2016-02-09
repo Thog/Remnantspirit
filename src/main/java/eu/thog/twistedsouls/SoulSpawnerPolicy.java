@@ -1,5 +1,6 @@
 package eu.thog.twistedsouls;
 
+import eu.thog.twistedsouls.item.ItemShard;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -39,6 +40,11 @@ public class SoulSpawnerPolicy
         this.maxNearbyEntities = 6;
     }
 
+    public static SoulSpawnerPolicy init(World world, BlockPos pos)
+    {
+        return new SoulSpawnerPolicy(world, pos);
+    }
+
     public BlockPos getSpawnerPosition()
     {
         return spawnerPos;
@@ -55,17 +61,6 @@ public class SoulSpawnerPolicy
             return this.world.isAnyPlayerWithinRangeAt((double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.5D, (double) blockpos.getZ() + 0.5D, 16);
         }
         return true;
-    }
-
-    public void setSoulData(ItemShard.SoulData data)
-    {
-        this.data = data;
-        if (data != null)
-            updateData();
-        else
-        {
-            this.spawnDelay = -1;
-        }
     }
 
     public void setDelay(int delay)
@@ -201,21 +196,27 @@ public class SoulSpawnerPolicy
         compound.setInteger("spawnDelay", spawnDelay);
     }
 
-    public static SoulSpawnerPolicy init(World world, BlockPos pos)
-    {
-        return new SoulSpawnerPolicy(world, pos);
-    }
-
     public ItemShard.SoulData getSoulData()
     {
         return data;
+    }
+
+    public void setSoulData(ItemShard.SoulData data)
+    {
+        this.data = data;
+        if (data != null)
+            updateData();
+        else
+        {
+            this.spawnDelay = -1;
+        }
     }
 
     public ItemStack toShard()
     {
         if (data == null)
             return null;
-        ItemStack stack = new ItemStack(RemnantSpiritRegistry.SHARD, 1);
+        ItemStack stack = new ItemStack(TwistedSouls.Registry.SHARD, 1);
         stack.setTagCompound(data.serialize());
         stack.setItemDamage(stack.getMaxDamage() - data.getKilled());
         return stack;

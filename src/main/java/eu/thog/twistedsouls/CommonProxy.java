@@ -1,5 +1,7 @@
 package eu.thog.twistedsouls;
 
+import eu.thog.twistedsouls.item.ItemShard;
+import eu.thog.twistedsouls.tileentity.TileEntitySoulSpawner;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -21,16 +23,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.lang.reflect.Field;
 
-/**
- * Desc...
- * Created by Thog the 22/01/2016
- */
 public class CommonProxy
 {
     public void preInit()
     {
         MinecraftForge.EVENT_BUS.register(this);
-        for (Field field : RemnantSpiritRegistry.class.getFields())
+        for (Field field : TwistedSouls.Registry.class.getFields())
         {
             try
             {
@@ -89,7 +87,7 @@ public class CommonProxy
                         ItemStack stack = player.inventory.getStackInSlot(i);
                         if (stack != null)
                         {
-                            if (stack.getItem() == RemnantSpiritRegistry.SHARD && stack.getItemDamage() != 0)
+                            if (stack.getItem() == TwistedSouls.Registry.SHARD && stack.getItemDamage() != 0)
                             {
                                 NBTTagCompound compound = stack.getTagCompound();
                                 if (compound != null)
@@ -102,8 +100,7 @@ public class CommonProxy
                                         return;
                                     }
                                 }
-                            }
-                            else if (stack.getItem() == RemnantSpiritRegistry.EMPTY_SHARD)
+                            } else if (stack.getItem() == TwistedSouls.Registry.EMPTY_SHARD)
                             {
                                 emptyShard = stack;
                             }
@@ -132,11 +129,11 @@ public class CommonProxy
         ItemStack right = event.right;
         ItemStack left = event.left;
 
-        if(right.getItem().equals(RemnantSpiritRegistry.SHARD) && left.getItem().equals(RemnantSpiritRegistry.SHARD) && right.getItemDamage() != 0)
+        if (right.getItem().equals(TwistedSouls.Registry.SHARD) && left.getItem().equals(TwistedSouls.Registry.SHARD) && right.getItemDamage() != 0)
         {
             ItemStack output = right.copy();
             int rightKill = right.getMaxDamage() - right.getItemDamage();
-            int leftKill  = left.getMaxDamage() - left.getItemDamage();
+            int leftKill = left.getMaxDamage() - left.getItemDamage();
             output.setItemDamage(output.getMaxDamage() - (rightKill + leftKill));
             event.output = output;
         }
@@ -148,12 +145,12 @@ public class CommonProxy
         ItemStack right = event.right;
         ItemStack left = event.left;
 
-        if(right.getItem().equals(RemnantSpiritRegistry.SHARD) && left.getItem().equals(RemnantSpiritRegistry.SHARD) && right.getItemDamage() != 0)
+        if (right.getItem().equals(TwistedSouls.Registry.SHARD) && left.getItem().equals(TwistedSouls.Registry.SHARD) && right.getItemDamage() != 0)
         {
             int rightKill = right.getMaxDamage() - right.getItemDamage();
-            int leftKill  = left.getMaxDamage() - left.getItemDamage();
+            int leftKill = left.getMaxDamage() - left.getItemDamage();
             event.output.setTagCompound(right.getTagCompound());
-            event.output.setItem(RemnantSpiritRegistry.SHARD);
+            event.output.setItem(TwistedSouls.Registry.SHARD);
             event.output.setItemDamage(right.getMaxDamage() - (rightKill + leftKill));
         }
     }

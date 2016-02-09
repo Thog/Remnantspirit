@@ -1,5 +1,7 @@
-package eu.thog.twistedsouls;
+package eu.thog.twistedsouls.block;
 
+import eu.thog.twistedsouls.TwistedSouls;
+import eu.thog.twistedsouls.tileentity.TileEntitySoulSpawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -17,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSoulSpawner extends Block implements ITileEntityProvider
 {
-    protected BlockSoulSpawner()
+    public BlockSoulSpawner()
     {
         super(Material.rock);
     }
@@ -29,7 +31,7 @@ public class BlockSoulSpawner extends Block implements ITileEntityProvider
         {
             ItemStack stack = playerIn.getHeldItem();
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (stack != null && tile != null && tile instanceof TileEntitySoulSpawner && stack.getItem() == RemnantSpiritRegistry.SHARD && ((TileEntitySoulSpawner) tile).getSoulData() == null)
+            if (stack != null && tile != null && tile instanceof TileEntitySoulSpawner && stack.getItem() == TwistedSouls.Registry.SHARD && ((TileEntitySoulSpawner) tile).getSoulData() == null)
                 return ((TileEntitySoulSpawner) tile).applyShard(stack);
             if (stack == null && tile != null && tile instanceof TileEntitySoulSpawner && ((TileEntitySoulSpawner) tile).getSoulData() != null)
             {

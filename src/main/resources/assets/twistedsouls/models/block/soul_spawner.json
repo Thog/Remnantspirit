@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "remnantspirit:blocks/soul_spawner"
+    "all": "twistedsouls:blocks/soul_spawner"
   }
 }

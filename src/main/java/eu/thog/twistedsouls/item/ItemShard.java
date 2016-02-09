@@ -1,5 +1,6 @@
-package eu.thog.twistedsouls;
+package eu.thog.twistedsouls.item;
 
+import eu.thog.twistedsouls.TwistedSouls;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,15 +13,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Desc...
- * Created by Thog the 22/01/2016
- */
 public class ItemShard extends Item
 {
     public ItemShard()
     {
         this.setMaxDamage(1024);
+    }
+
+    public static ItemStack initShard(ItemStack stack, EntityLiving entity)
+    {
+        ItemStack newStack = new ItemStack(TwistedSouls.Registry.SHARD, 1);
+        newStack.setItemDamage(TwistedSouls.Registry.SHARD.getMaxDamage() - 1);
+        newStack.setTagCompound(SoulData.init(entity).serialize());
+        if (stack != null)
+            --stack.stackSize;
+        return newStack;
     }
 
     @SideOnly(Side.CLIENT)
@@ -50,16 +57,6 @@ public class ItemShard extends Item
         return compound;
     }
 
-    public static ItemStack initShard(ItemStack stack, EntityLiving entity)
-    {
-        ItemStack newStack = new ItemStack(RemnantSpiritRegistry.SHARD, 1);
-        newStack.setItemDamage(RemnantSpiritRegistry.SHARD.getMaxDamage() - 1);
-        newStack.setTagCompound(SoulData.init(entity).serialize());
-        if (stack != null)
-            --stack.stackSize;
-        return newStack;
-    }
-
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(ItemStack stack)
     {
@@ -74,44 +71,16 @@ public class ItemShard extends Item
 
     public static class SoulData
     {
+        private final static List<String> FORBIDDEN_NBT = Arrays.asList("X", "Y", "Z", "UUIDMost", "UUIDLeast", "Health", "HealF", "ActiveEffects", "HurtTime", "DeathTime", "HurtByTimestamp");
         private String mobID;
         private String mobName;
         private int tier;
         private int killed;
         private NBTTagCompound compound;
-        private final static List<String> FORBIDDEN_NBT = Arrays.asList("X", "Y", "Z", "UUIDMost", "UUIDLeast", "Health", "HealF", "ActiveEffects", "HurtTime", "DeathTime", "HurtByTimestamp");
 
         private SoulData()
         {
 
-        }
-
-        public NBTTagCompound serialize()
-        {
-            NBTTagCompound compound = new NBTTagCompound();
-            this.writeNBT(compound);
-            return compound;
-        }
-
-        public void readNBT(NBTTagCompound compound)
-        {
-            this.mobID = compound.getString("mobID");
-            this.mobName = compound.getString("mobName");
-            this.tier = compound.getInteger("tier");
-            this.killed = compound.getByte("killed");
-            this.compound = compound; // Contain Entity extra data
-        }
-
-        public void writeNBT(NBTTagCompound compound)
-        {
-            for (String entry : this.compound.getKeySet())
-            {
-                compound.setTag(entry, this.compound.getTag(entry));
-            }
-            compound.setString("mobID", mobID);
-            compound.setString("mobName", mobName);
-            compound.setInteger("tier", killed / 204);
-            compound.setInteger("killed", killed);
         }
 
         public static SoulData deserialize(NBTTagCompound compound)
@@ -146,6 +115,34 @@ public class ItemShard extends Item
             compound.setBoolean("PersistenceRequired", true); // Force persistence
             data.compound = compound;
             return data;
+        }
+
+        public NBTTagCompound serialize()
+        {
+            NBTTagCompound compound = new NBTTagCompound();
+            this.writeNBT(compound);
+            return compound;
+        }
+
+        public void readNBT(NBTTagCompound compound)
+        {
+            this.mobID = compound.getString("mobID");
+            this.mobName = compound.getString("mobName");
+            this.tier = compound.getInteger("tier");
+            this.killed = compound.getByte("killed");
+            this.compound = compound; // Contain Entity extra data
+        }
+
+        public void writeNBT(NBTTagCompound compound)
+        {
+            for (String entry : this.compound.getKeySet())
+            {
+                compound.setTag(entry, this.compound.getTag(entry));
+            }
+            compound.setString("mobID", mobID);
+            compound.setString("mobName", mobName);
+            compound.setInteger("tier", killed / 204);
+            compound.setInteger("killed", killed);
         }
 
         public String getMobName()

@@ -1,5 +1,7 @@
-package eu.thog.twistedsouls;
+package eu.thog.twistedsouls.tileentity;
 
+import eu.thog.twistedsouls.SoulSpawnerPolicy;
+import eu.thog.twistedsouls.item.ItemShard;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -10,10 +12,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
 
-/**
- * Desc...
- * Created by Thog the 08/02/2016
- */
 public class TileEntitySoulSpawner extends TileEntity implements ITickable
 {
     private final SoulSpawnerPolicy policy;
