@@ -1,6 +1,7 @@
 package eu.thog.twistedsouls;
 
 import eu.thog.twistedsouls.item.ItemShard;
+import eu.thog.twistedsouls.tileentity.TileEntitySoulContainer;
 import eu.thog.twistedsouls.tileentity.TileEntitySoulSpawner;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -11,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.common.MinecraftForge;
@@ -44,6 +44,7 @@ public class CommonProxy
         }
 
         GameRegistry.registerTileEntity(TileEntitySoulSpawner.class, "TileEntitySoulSpawner");
+        GameRegistry.registerTileEntity(TileEntitySoulContainer.class, "TileEntitySoulContainer");
     }
 
     protected void registerItem(Item item, String name)
@@ -54,11 +55,6 @@ public class CommonProxy
     protected void registerBlock(Block block, String name)
     {
         GameRegistry.registerBlock(block, name);
-    }
-
-    protected void registerTileEntity(Class<? extends TileEntity> tileClass, String name)
-    {
-        GameRegistry.registerTileEntity(tileClass, name);
     }
 
     public void init()

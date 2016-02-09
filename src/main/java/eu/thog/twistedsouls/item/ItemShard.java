@@ -139,6 +139,8 @@ public class ItemShard extends Item
             {
                 compound.setTag(entry, this.compound.getTag(entry));
             }
+            for (String key : FORBIDDEN_NBT)
+                compound.removeTag(key);
             compound.setString("mobID", mobID);
             compound.setString("mobName", mobName);
             compound.setInteger("tier", killed / 204);
@@ -163,6 +165,11 @@ public class ItemShard extends Item
         public int getKilled()
         {
             return killed;
+        }
+
+        public void setKilled(int killed)
+        {
+            this.killed = killed;
         }
 
         public NBTTagCompound getCompound()

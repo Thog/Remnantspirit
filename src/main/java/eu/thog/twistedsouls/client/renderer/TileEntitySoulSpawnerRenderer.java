@@ -1,6 +1,6 @@
 package eu.thog.twistedsouls.client.renderer;
 
-import eu.thog.twistedsouls.SoulSpawnerPolicy;
+import eu.thog.twistedsouls.data.SoulSpawnerPolicy;
 import eu.thog.twistedsouls.tileentity.TileEntitySoulSpawner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -22,7 +22,7 @@ public class TileEntitySoulSpawnerRenderer extends TileEntitySpecialRenderer<Til
     {
         if (policy.getSoulData() != null)
         {
-            Entity entity = policy.getRenderEntity();
+            Entity entity = policy.getEntity(policy.getWorld());
             float f = 0.4375F;
             GlStateManager.translate(0.0F, 0.4F, 0.0F);
             GlStateManager.rotate((float) (policy.getPrevMobRotation() + (policy.getMobRotation() - policy.getPrevMobRotation()) * (double) partialTicks) * 10.0F, 0.0F, 1.0F, 0.0F);

@@ -3,7 +3,9 @@ package eu.thog.twistedsouls.client;
 import eu.thog.twistedsouls.CommonProxy;
 import eu.thog.twistedsouls.TwistedSouls;
 import eu.thog.twistedsouls.client.renderer.IModelLoader;
+import eu.thog.twistedsouls.client.renderer.TileEntitySoulContainerRenderer;
 import eu.thog.twistedsouls.client.renderer.TileEntitySoulSpawnerRenderer;
+import eu.thog.twistedsouls.tileentity.TileEntitySoulContainer;
 import eu.thog.twistedsouls.tileentity.TileEntitySoulSpawner;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -19,6 +21,7 @@ public class ClientProxy extends CommonProxy
     {
         super.preInit();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySoulSpawner.class, new TileEntitySoulSpawnerRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySoulContainer.class, new TileEntitySoulContainerRenderer());
     }
 
     @Override

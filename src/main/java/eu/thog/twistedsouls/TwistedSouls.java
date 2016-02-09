@@ -1,5 +1,6 @@
 package eu.thog.twistedsouls;
 
+import eu.thog.twistedsouls.block.BlockSoulContainer;
 import eu.thog.twistedsouls.block.BlockSoulSpawner;
 import eu.thog.twistedsouls.item.ItemShard;
 import net.minecraft.block.Block;
@@ -36,6 +37,6 @@ public class TwistedSouls
         public static final Item EMPTY_SHARD = new Item().setUnlocalizedName("empty_shard").setCreativeTab(CreativeTabs.tabMisc);
         public static final Item SHARD = new ItemShard().setUnlocalizedName("shard");
         public static final Block SOUL_SPAWNER = new BlockSoulSpawner().setUnlocalizedName("soul_spawner").setCreativeTab(CreativeTabs.tabMisc);
-
+        public static final Block SOUL_CONTAINER = new BlockSoulContainer().setUnlocalizedName("soul_container").setCreativeTab(CreativeTabs.tabMisc);
     }
 }

@@ -1,18 +1,14 @@
 package eu.thog.twistedsouls.tileentity;
 
-import eu.thog.twistedsouls.SoulSpawnerPolicy;
+import eu.thog.twistedsouls.data.SoulSpawnerPolicy;
 import eu.thog.twistedsouls.item.ItemShard;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
 
-public class TileEntitySoulSpawner extends TileEntity implements ITickable
+public class TileEntitySoulSpawner extends TileEntitySyncable implements ITickable, IShardInteract
 {
     private final SoulSpawnerPolicy policy;
 
@@ -75,30 +71,17 @@ public class TileEntitySoulSpawner extends TileEntity implements ITickable
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
+    public void readFromNBT(NBTTagCompound compound)
     {
-        this.readFromNBT(pkt.getNbtCompound());
-        this.worldObj.markBlockForUpdate(pos);
+        this.policy.readFromNBT(compound);
+        super.readFromNBT(compound);
     }
 
     @Override
-    public Packet getDescriptionPacket()
-    {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-        this.writeToNBT(nbttagcompound);
-        return new S35PacketUpdateTileEntity(this.pos, 1, nbttagcompound);
-    }
-
-    public void readFromNBT(NBTTagCompound compound)
-    {
-        super.readFromNBT(compound);
-        this.policy.readFromNBT(compound);
-    }
-
     public void writeToNBT(NBTTagCompound compound)
     {
-        super.writeToNBT(compound);
         this.policy.writeToNBT(compound);
+        super.writeToNBT(compound);
     }
 
     @Override

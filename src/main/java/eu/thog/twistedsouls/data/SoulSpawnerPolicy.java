@@ -1,36 +1,24 @@
-package eu.thog.twistedsouls;
+package eu.thog.twistedsouls.data;
 
 import eu.thog.twistedsouls.item.ItemShard;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class SoulSpawnerPolicy
+public class SoulSpawnerPolicy extends SoulVisualizer
 {
     private BlockPos spawnerPos;
     private World world;
-    private ItemShard.SoulData data;
     private int delay;
     private int mobCount;
     private int spawnDelay;
     private int spawnRange;
     private int maxNearbyEntities;
-    @SideOnly(value = Side.CLIENT)
-    private Entity renderEntity;
-    @SideOnly(value = Side.CLIENT)
-    private double prevMobRotation;
-    @SideOnly(value = Side.CLIENT)
-    private double mobRotation;
-
 
     protected SoulSpawnerPolicy(World world, BlockPos pos)
     {
@@ -52,9 +40,10 @@ public class SoulSpawnerPolicy
 
     public boolean isActivated()
     {
-        if (data == null)
+        ItemShard.SoulData soulData = this.getSoulData();
+        if (soulData == null)
             return false;
-        int tier = data.getTier();
+        int tier = soulData.getTier();
         if (tier < 5)
         {
             BlockPos blockpos = this.getSpawnerPosition();
@@ -68,10 +57,9 @@ public class SoulSpawnerPolicy
         this.delay = (delay * 20);
     }
 
-
     private void updateData()
     {
-        int t = this.data.getTier();
+        int t = this.getSoulData().getTier();
         if (t == 1)
         {
             this.mobCount = 2;
@@ -125,7 +113,7 @@ public class SoulSpawnerPolicy
 
                 for (int i = 0; i < this.mobCount; ++i)
                 {
-                    Entity entity = EntityList.createEntityByName(data.getMobID(), this.world);
+                    Entity entity = EntityList.createEntityByName(getSoulData().getMobID(), this.world);
 
                     if (entity == null)
                     {
@@ -134,7 +122,7 @@ public class SoulSpawnerPolicy
 
                     int j = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double) blockpos.getX(), (double) blockpos.getY(), (double) blockpos.getZ(), (double) (blockpos.getX() + 1), (double) (blockpos.getY() + 1), (double) (blockpos.getZ() + 1))).expand((double) this.spawnRange, (double) this.spawnRange, (double) this.spawnRange)).size();
 
-                    if (this.data.getTier() < 5 && j >= this.maxNearbyEntities)
+                    if (getSoulData().getTier() < 5 && j >= this.maxNearbyEntities)
                     {
                         this.spawnDelay = delay;
                         return;
@@ -152,7 +140,7 @@ public class SoulSpawnerPolicy
                         {
                             try
                             {
-                                entityliving.readEntityFromNBT(this.data.getCompound());
+                                entityliving.readEntityFromNBT(getSoulData().getCompound());
                             } catch (Exception e)
                             {
                                 e.printStackTrace();
@@ -179,52 +167,29 @@ public class SoulSpawnerPolicy
         }
     }
 
+    @Override
     public void readFromNBT(NBTTagCompound compound)
     {
-        this.data = ItemShard.SoulData.deserialize(compound);
-        if (this.data == null && FMLCommonHandler.instance().getSide().isClient())
-            this.renderEntity = null;
-        if (data != null)
+        super.readFromNBT(compound);
+        if (getSoulData() != null)
             updateData();
         this.spawnDelay = compound.getInteger("spawnDelay");
     }
 
+    @Override
     public void writeToNBT(NBTTagCompound compound)
     {
-        if (data != null)
-            data.writeNBT(compound);
+        super.writeToNBT(compound);
         compound.setInteger("spawnDelay", spawnDelay);
-    }
-
-    public ItemShard.SoulData getSoulData()
-    {
-        return data;
     }
 
     public void setSoulData(ItemShard.SoulData data)
     {
-        this.data = data;
+        super.setSoulData(data);
         if (data != null)
             updateData();
         else
-        {
             this.spawnDelay = -1;
-        }
-    }
-
-    public ItemStack toShard()
-    {
-        if (data == null)
-            return null;
-        ItemStack stack = new ItemStack(TwistedSouls.Registry.SHARD, 1);
-        stack.setTagCompound(data.serialize());
-        stack.setItemDamage(stack.getMaxDamage() - data.getKilled());
-        return stack;
-    }
-
-    public void setWorld(World world)
-    {
-        this.world = world;
     }
 
     public void setPos(BlockPos pos)
@@ -232,27 +197,13 @@ public class SoulSpawnerPolicy
         this.spawnerPos = pos;
     }
 
-    @SideOnly(value = Side.CLIENT)
-    public double getPrevMobRotation()
+    public World getWorld()
     {
-        return prevMobRotation;
+        return world;
     }
 
-    @SideOnly(value = Side.CLIENT)
-    public double getMobRotation()
+    public void setWorld(World world)
     {
-        return mobRotation;
-    }
-
-    @SideOnly(value = Side.CLIENT)
-    public Entity getRenderEntity()
-    {
-        if (renderEntity == null)
-        {
-            this.renderEntity = EntityList.createEntityByName(data.getMobID(), this.world);
-            if (renderEntity != null)
-                this.renderEntity.readFromNBT(data.getCompound());
-        }
-        return renderEntity;
+        this.world = world;
     }
 }
