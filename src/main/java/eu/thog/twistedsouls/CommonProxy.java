@@ -127,11 +127,15 @@ public class CommonProxy
 
         if (right.getItem().equals(TwistedSouls.Registry.SHARD) && left.getItem().equals(TwistedSouls.Registry.SHARD) && right.getItemDamage() != 0)
         {
-            ItemStack output = right.copy();
+            ItemStack output = new ItemStack(TwistedSouls.Registry.SHARD);
             int rightKill = right.getMaxDamage() - right.getItemDamage();
             int leftKill = left.getMaxDamage() - left.getItemDamage();
+            ItemShard.SoulData rightData = ItemShard.SoulData.deserialize(right);
+            ItemShard.SoulData leftData = ItemShard.SoulData.deserialize(left);
+            output.setTagCompound(right.getTagCompound());
             output.setItemDamage(output.getMaxDamage() - (rightKill + leftKill));
             event.output = output;
+            event.cost = leftData.getTier() + rightData.getTier();
         }
     }
 
